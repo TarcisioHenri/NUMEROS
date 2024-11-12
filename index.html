@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adivinhação de Número</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a164e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #0a164e;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      border: 8px solid #ffffff; /* Adicionando borda branca */
+      
+      /* Efeito 3D com sombra e transform */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-10px); /* Move o container um pouco para cima, criando a sensação de flutuar */
+      transition: all 0.3s ease-in-out; /* Animação suave para o efeito 3D */
+    }
+
+    /* Ao passar o mouse, o efeito 3D aumenta */
+    .container:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), 0 16px 40px rgba(0, 0, 0, 0.4);
+      transform: translateY(-15px); /* Aumenta o efeito de flutuar ao passar o mouse */
+    }
+
+    h1 {
+      color: #ffffff;
+    }
+
+    .input-container {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 8px;
+      width: 80px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .feedback {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #ffffff;
+    }
+
+    .feedback.success {
+      color: #28a745;
+    }
+
+    .feedback.error {
+      color: #dc3545;
+    }
+
+    #novoJogo {
+      background-color: #ffffff;
+    }
+
+    #novoJogo:hover {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Jogo de Adivinhação de Número</h1>
+    <br><p>Eu escolhi um número entre 1 e 100. Tente adivinhar!</p> <br/>
+    
+    <div class="input-container">
+      <label for="guessInput">Digite seu palpite:</label>
+      <input type="number" id="guessInput" min="1" max="100" placeholder="Digite um número">
+      <button onclick="verificarPalpite()">Verificar</button>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+    
+    <button id="novoJogo" onclick="novoJogo()" style="display:none;">Novo Jogo</button>
+  </div>
+
+  <script>
+    let numeroSecreto;
+    let tentativas = 0;
+
+    // Função para iniciar um novo jogo
+    function novoJogo() {
+      // Gerar um número aleatório entre 1 e 100
+      numeroSecreto = Math.floor(Math.random() * 100) + 1;
+      tentativas = 0;
+
+      // Mostrar os elementos iniciais
+      document.getElementById('guessInput').value = '';
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('novoJogo').style.display = 'none';
+
+      // Exibir o botão de verificar
+      document.querySelector('button').style.display = 'inline-block';
+    }
+
+    // Função para verificar o palpite do usuário
+    function verificarPalpite() {
+      const palpite = parseInt(document.getElementById('guessInput').value);
+      
+      // Se o palpite for inválido
+      if (isNaN(palpite) || palpite < 1 || palpite > 100) {
+        document.getElementById('feedback').textContent = 'Por favor, digite um número entre 1 e 100!';
+        document.getElementById('feedback').classList.add('error');
+        return;
+      }
+
+      tentativas++;
+
+      if (palpite === numeroSecreto) {
+        document.getElementById('feedback').textContent = `Parabéns! Você acertou o número em ${tentativas} tentativas.`;
+        document.getElementById('feedback').classList.add('success');
+        document.getElementById('novoJogo').style.display = 'inline-block';
+        document.querySelector('button').style.display = 'none';
+      } else if (palpite < numeroSecreto) {
+        document.getElementById('feedback').textContent = 'O número secreto é maior!';
+        document.getElementById('feedback').classList.add('error');
+      } else {
+        document.getElementById('feedback').textContent = 'O número secreto é menor!';
+        document.getElementById('feedback').classList.add('error');
+      }
+    }
+    
+    // Inicializa o primeiro jogo quando a página carrega
+    window.onload = novoJogo;
+  </script>
+
+</body>
+</html>
